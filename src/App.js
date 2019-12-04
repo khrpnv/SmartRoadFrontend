@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import MainPage from "./components/MainPage";
+import DriverPage from "./components/DriverPage";
+import OwnerPage from "./components/OwnerPage";
+
+import {BrowserRouter, Route} from "react-router-dom";
+import RoadsPage from "./components/RoadsPage";
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    document.title = "SmartRoad";
+    return (
+        <BrowserRouter>
+            <div>
+                <Route path={["/", "/smart_road/main"]} exact component={MainPage}/>
+                <Route path="/smart_road/driver" exact component={DriverPage}/>
+                <Route path="/smart_road/owner" exact component={OwnerPage}/>
+                <Route path="/smart_road/roads" exact component={RoadsPage}/>
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;
+

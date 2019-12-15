@@ -5,6 +5,7 @@ import {Form, Button, Table} from "react-bootstrap";
 import * as ServiceStationsService from '../services/ServiceStationsService'
 import * as ServiceTypesService from '../services/ServiceTypesService'
 import Copyright from "./ui/Copyright";
+import {Redirect} from "react-router-dom";
 
 
 export default class OwnerPage extends React.Component {
@@ -100,6 +101,7 @@ export default class OwnerPage extends React.Component {
                 width: "900px",
                 height: "1500px"
             }}>
+                {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header/>
                 <div className="ownerData">
                     <div className="ownerSegmentHeader">

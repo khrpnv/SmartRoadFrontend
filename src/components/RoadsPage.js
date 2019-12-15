@@ -4,6 +4,7 @@ import Chart from "../components/ui/Chart"
 import * as RoadsService from "../services/RoadsService"
 import {Button, Form, Table} from "react-bootstrap";
 import Copyright from "./ui/Copyright";
+import {Redirect} from "react-router-dom";
 
 export default class RoadsPage extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ export default class RoadsPage extends React.Component {
     render() {
         return (
             <div className="contentContainer" style={{width: "1000px", height: "1200px"}}>
+                {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header/>
                 <h1 style={{textAlign: "center"}}>Traffic jam statistics</h1>
                 <div style={{width: "90%", height: "400px"}}>

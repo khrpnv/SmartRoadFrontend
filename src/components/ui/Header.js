@@ -27,10 +27,14 @@ class Header extends React.Component {
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
                         <input type="image"
-                               src="https://icon-library.net/images/white-gear-icon/white-gear-icon-17.jpg"
+                               src="https://vectr.com/tmp/d2FW8O7NqE/d24YmVnnZD.png?width=640&height=640&select=d24YmVnnZDpage0"
                                style={{
                                    width: "30px",
                                    height: "30px"
+                               }}
+                               onClick={() => {
+                                   localStorage.setItem('login', 'false');
+                                   this.props.history.push('/smart_road/login')
                                }}
                         />
                     </Navbar.Collapse>

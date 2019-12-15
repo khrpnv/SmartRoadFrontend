@@ -3,6 +3,7 @@ import Header from "./ui/Header";
 import * as ServiceStationsService from "../services/ServiceStationsService"
 import {Button, Form, Table} from "react-bootstrap";
 import ServiceTypesDropDown from "./ui/ServiceTypesDropDown";
+import {Redirect} from "react-router-dom";
 
 export default class DriverPage extends React.Component {
     constructor(props) {
@@ -58,6 +59,7 @@ export default class DriverPage extends React.Component {
                 width: "900px",
                 height: "800px"
             }}>
+                {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header/>
                 <div style={this.state.isLoading ? {
                     width: "100%",

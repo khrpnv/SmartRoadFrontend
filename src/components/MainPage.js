@@ -3,6 +3,7 @@ import Header from "../components/ui/Header"
 import ImageCarousel from "./ui/Carousel";
 import MainPageCard from "./ui/MainPageCard";
 import Copyright from "./ui/Copyright";
+import {Redirect} from "react-router-dom";
 
 export default class MainPage extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class MainPage extends React.Component {
     render() {
         return (
             <div>
+                {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <div className="contentContainer" style={{
                     width: "900px",
                     height: "990px"

@@ -106,7 +106,15 @@ export default class RoadsPage extends React.Component {
                                             RoadsService.getType(road.id)
                                                 .then(res => {
                                                     this.setState({...this.state, roadState: res});
-                                                    alert(this.state.roadState);
+                                                    if (localStorage.getItem("language") === 'en') {
+                                                        alert(this.state.roadState);
+                                                    } else {
+                                                        if (this.state.roadState === 'jam') {
+                                                            alert("затор")
+                                                        } else {
+                                                            alert("вільно")
+                                                        }
+                                                    }
                                                 })
                                                 .catch(
                                                     error => {

@@ -5,6 +5,7 @@ import {Button, Form, Table} from "react-bootstrap";
 import ServiceTypesDropDown from "./ui/ServiceTypesDropDown";
 import {Redirect} from "react-router-dom";
 import LocalizedStrings from 'react-localization';
+import Map from "./ui/GoogleMaps"
 
 let strings = new LocalizedStrings({
     en: {
@@ -31,9 +32,9 @@ export default class DriverPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            lat: 0,
+            lat: 49.98835,
             serviceStations: [],
-            long: 0,
+            long: 36.232845,
             isLoading: true,
             searchTypeId: -1,
             title: strings.serviceType
@@ -93,7 +94,7 @@ export default class DriverPage extends React.Component {
         return (
             <div className="contentContainer" style={{
                 width: "900px",
-                height: "800px"
+                height: "900px"
             }}>
                 {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header switchLanguage={this.switchLanguage}/>
@@ -122,29 +123,8 @@ export default class DriverPage extends React.Component {
                         {strings.submit}
                     </Button>
                 </div>
-                <div>
-                    <Table striped bordered hover size="sm" style={{marginTop: "15px"}}>
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{strings.tableName}</th>
-                            <th>{strings.tableDesc}</th>
-                            <th>{strings.tableCoords}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            this.state.serviceStations.map((station, index) => (
-                                <tr>
-                                    <td>{index}</td>
-                                    <td>{station.name}</td>
-                                    <td>{station.description}</td>
-                                    <td>{station.latitude} - {station.longtitude}</td>
-                                </tr>
-                            ))
-                        }
-                        </tbody>
-                    </Table>
+                <div style={{marginTop: "20px"}}>
+                    <Map centerLat={this.state.lat} centerLon={this.state.long} services={this.state.serviceStations}/>
                 </div>
             </div>
         )

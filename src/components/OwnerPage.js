@@ -7,6 +7,7 @@ import * as ServiceTypesService from '../services/ServiceTypesService'
 import Copyright from "./ui/Copyright";
 import {Redirect} from "react-router-dom";
 import LocalizedStrings from 'react-localization';
+import Map from "./ui/GoogleMaps"
 
 let strings = new LocalizedStrings({
     en: {
@@ -146,8 +147,8 @@ export default class OwnerPage extends React.Component {
         strings.setLanguage(localStorage.getItem("language"));
         return (
             <div className="contentContainer" style={{
-                width: "900px",
-                height: "1500px"
+                width: "950px",
+                height: "1700px"
             }}>
                 {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header switchLanguage={this.switchLanguage}/>
@@ -204,28 +205,9 @@ export default class OwnerPage extends React.Component {
                             {strings.submit}
                         </Button>
                     </div>
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{strings.tableName}</th>
-                            <th>{strings.tableDesc}</th>
-                            <th>{strings.tableLoc}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            this.state.serviceStations.map((station, index) => (
-                                <tr>
-                                    <td>{index}</td>
-                                    <td>{station.name}</td>
-                                    <td>{station.description}</td>
-                                    <td>{station.latitude} - {station.longtitude}</td>
-                                </tr>
-                            ))
-                        }
-                        </tbody>
-                    </Table>
+                    <div style={{marginTop: "20px"}}>
+                        <Map centerLat={49.98835} centerLon={36.232845} services={this.state.serviceStations}/>
+                    </div>
                 </div>
 
                 <div style={{width: "900px"}}>

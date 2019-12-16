@@ -1,6 +1,30 @@
 import React from "react";
 import {Form, Button} from "react-bootstrap";
 import * as UsersService from "../services/UsersService";
+import LocalizedStrings from 'react-localization';
+
+let strings = new LocalizedStrings({
+    en: {
+        header: "Authorization",
+        emailHeader: "Email address",
+        passwordHeader: "Password",
+        emailPlaceholder: "Enter email",
+        emailDesc: "We'll never share your email with anyone else.",
+        loginButton: "Log in",
+        signupButton: "Sign up",
+        switchLanguage: "Switch Language"
+    },
+    ua: {
+        header: "Авторизація",
+        emailHeader: "Електронна пошта",
+        passwordHeader: "Пароль",
+        emailPlaceholder: "Введіть поштову адресу",
+        emailDesc: "Ці дані не будуть доступні жодному з користувачів.",
+        loginButton: "Увійти",
+        signupButton: "Зареєструватись",
+        switchLanguage: "Змінити Мову"
+    }
+});
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -15,6 +39,18 @@ export default class LoginPage extends React.Component {
         this.handleSignUpSubmit = this.handleSignUpSubmit.bind(this);
         this.handleLogInSubmit = this.handleLogInSubmit.bind(this);
         this.checkInputFields = this.checkInputFields.bind(this);
+        this.switchLanguage = this.switchLanguage.bind(this);
+    }
+
+    switchLanguage() {
+        let currentLanguage = localStorage.getItem("language");
+        if (currentLanguage === 'en') {
+            strings.setLanguage('ua');
+        } else {
+            strings.setLanguage('en');
+        }
+        localStorage.setItem("language", strings.getLanguage());
+        this.setState({...this.state});
     }
 
     checkInputFields() {
@@ -73,33 +109,36 @@ export default class LoginPage extends React.Component {
     }
 
     render() {
+        let language = localStorage.getItem("language") === "null" ? 'en' : localStorage.getItem("language");
+        strings.setLanguage(language);
+        localStorage.setItem("language", language);
         return (
             <div className="contentContainer" style={{
                 width: "500px",
-                height: "350px"
+                height: "400px"
             }}>
-                <h1 style={{textAlign: "center"}}>Authorization</h1>
+                <h1 style={{textAlign: "center"}}>{strings.header}</h1>
                 <div className="formDivs" style={{
                     margin: "auto",
                 }}>
                     <Form style={{marginLeft: "10px", width: "95%"}}>
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
+                            <Form.Label>{strings.emailHeader}</Form.Label>
                             <Form.Control type="email"
                                           required
-                                          placeholder="Enter email"
+                                          placeholder={strings.emailPlaceholder}
                                           value={this.state.email}
                                           onChange={this.handleSignUpEmailChange}
                             />
                             <Form.Text className="text-muted">
-                                We'll never share your email with anyone else.
+                                {strings.emailDesc}
                             </Form.Text>
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label>{strings.passwordHeader}</Form.Label>
                             <Form.Control type="password"
                                           required
-                                          placeholder="Password"
+                                          placeholder={strings.passwordHeader}
                                           value={this.state.password}
                                           onChange={this.handleSignUpPasswordChange}
                             />
@@ -107,20 +146,24 @@ export default class LoginPage extends React.Component {
                         <Button variant="primary"
                                 type="submit"
                                 onClick={this.handleLogInSubmit}
-                                style={{float: "left", marginLeft: "100px"}}
-                        >
-                            Log in
+                                style={{float: "left", marginLeft: "80px"}}>
+                            {strings.loginButton}
                         </Button>
                         <Button variant="primary"
                                 type="submit"
                                 onClick={this.handleSignUpSubmit}
-                                style={{float: "right", marginRight: "100px"}}
-                        >
-                            Sign up
+                                style={{float: "right", marginRight: "80px"}}>
+                            {strings.signupButton}
                         </Button>
                     </Form>
                 </div>
-
+                <div style={{margin: "auto", width: "200px", textAlign: "center"}}>
+                    <Button variant="success"
+                            style={{marginTop: "20px"}}
+                            onClick={this.switchLanguage}>
+                        {strings.switchLanguage}
+                    </Button>
+                </div>
             </div>
         )
     }

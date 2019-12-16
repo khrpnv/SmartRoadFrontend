@@ -1,6 +1,16 @@
 import React from "react";
 import {DropdownButton, Dropdown} from "react-bootstrap";
 import * as ServiceTypesService from "../../services/ServiceTypesService"
+import LocalizedStrings from 'react-localization';
+
+let strings = new LocalizedStrings({
+    en: {
+        name: "Service Types"
+    },
+    ua: {
+        name: "Тип Сервісу"
+    }
+});
 
 export default class ServiceTypesDropDown extends React.Component {
     constructor(props) {
@@ -9,7 +19,7 @@ export default class ServiceTypesDropDown extends React.Component {
             serviceTypes: [],
             selectedType: {
                 id: -1,
-                title: 'Service Type'
+                title: "Service Types"
             }
         }
     }
@@ -19,6 +29,7 @@ export default class ServiceTypesDropDown extends React.Component {
     }
 
     render() {
+        strings.setLanguage(localStorage.getItem("language"));
         return (
             <DropdownButton id="dropdown-basic-button" title={this.state.selectedType.title}>
                 {this.state.serviceTypes.map(type => (

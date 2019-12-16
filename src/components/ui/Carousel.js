@@ -1,8 +1,24 @@
 import React from "react";
 import {Carousel} from "react-bootstrap";
+import LocalizedStrings from 'react-localization';
+
+let strings = new LocalizedStrings({
+    en: {
+        jam: "Traffic jam",
+        serviceStation: "Service station",
+        carWash: "Car wash"
+    },
+    ua: {
+        jam: "Затор",
+        serviceStation: "Станція обслуговування",
+        carWash: "Автомийка"
+    }
+});
 
 export default class ImageCarousel extends React.Component {
+
     render() {
+        strings.setLanguage(localStorage.getItem("language"));
         return(
             <Carousel>
                 <Carousel.Item>
@@ -12,7 +28,7 @@ export default class ImageCarousel extends React.Component {
                         alt="Traffic jam"
                     />
                     <Carousel.Caption>
-                        <h1>Traffic jam</h1>
+                        <h1>{strings.jam}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
@@ -23,7 +39,7 @@ export default class ImageCarousel extends React.Component {
                     />
 
                     <Carousel.Caption>
-                        <h1>Service station</h1>
+                        <h1>{strings.serviceStation}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
@@ -33,7 +49,7 @@ export default class ImageCarousel extends React.Component {
                         alt="Third slide"
                     />
                     <Carousel.Caption>
-                        <h1>Car wash</h1>
+                        <h1>{strings.carWash}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>

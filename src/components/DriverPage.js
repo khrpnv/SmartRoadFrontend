@@ -6,6 +6,9 @@ import ServiceTypesDropDown from "./ui/ServiceTypesDropDown";
 import {Redirect} from "react-router-dom";
 import LocalizedStrings from 'react-localization';
 import Map from "./ui/GoogleMaps"
+import axios from "axios";
+
+const BASE_URL = `https://smart-road.herokuapp.com/api/service_stations`;
 
 let strings = new LocalizedStrings({
     en: {
@@ -60,6 +63,7 @@ export default class DriverPage extends React.Component {
     setSearchTypeId = (typeId) => {
         this.setState({
             ...this.state,
+            serviceStations: [],
             searchTypeId: typeId
         });
     };
@@ -107,14 +111,25 @@ export default class DriverPage extends React.Component {
                 </div>
                 <div>
                     <Form.Label style={{marginTop: "5px"}}>{strings.serviceType}: </Form.Label>
-                    <ServiceTypesDropDown setTypeId={this.setSearchTypeId} />
+                    <ServiceTypesDropDown setTypeId={this.setSearchTypeId}/>
                     <Button variant="primary" type="submit" style={{marginTop: "15px"}} onClick={() => {
                         let lat = this.state.lat;
                         let long = this.state.long;
                         let type = this.state.searchTypeId;
                         ServiceStationsService.getNearestStations(lat, long, type)
                             .then(res => {
-                                this.onItemClick(res);
+                                const result = [];
+                                res.forEach((item, index) => {
+                                    axios.get(`${BASE_URL}/${item.id}/sensors/empty`).then(res1 => {
+                                        if (res1.length !== 0) {
+                                            result.push(item)
+                                        }
+                                        if (index === res.length - 1) {
+                                            console.log(result)
+                                            this.onItemClick(result);
+                                        }
+                                    })
+                                });
                             })
                             .catch(error => {
                                 alert(`Error occurred: ${error}`)

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = `http://localhost:8080/api/service_stations`;
+const BASE_URL = `https://smart-road.herokuapp.com/api/service_stations`;
 
 export function postServiceStation(serviceStation) {
     return axios.post(`${BASE_URL}`, {

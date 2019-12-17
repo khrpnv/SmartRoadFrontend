@@ -1,5 +1,5 @@
 import axios from 'axios'
-const BASE_URL = `http://localhost:8080/api/users`;
+const BASE_URL = `https://smart-road.herokuapp.com/api/users`;
 
 export function registerUser(user) {
     return axios.post(`${BASE_URL}/register`, {

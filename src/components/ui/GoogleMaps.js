@@ -17,7 +17,6 @@ class GoogleMaps extends React.Component {
     }
 
     displayMarkers = () => {
-        console.log(this.props.services);
         return this.props.services.map((service, index) => (
             <Marker
                 key={index}

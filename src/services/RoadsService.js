@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = `http://localhost:8080/api/roads`;
+const BASE_URL = `https://smart-road.herokuapp.com/api/roads`;
 
 export function getAll() {
     return axios.get(`${BASE_URL}`).then(res => res.data);

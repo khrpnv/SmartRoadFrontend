@@ -9,6 +9,7 @@ import LoginPage from "./components/LoginPage";
 import {BrowserRouter, Route} from "react-router-dom";
 import RoadsPage from "./components/RoadsPage";
 
+
 function App() {
     document.title = "SmartRoad";
     return (

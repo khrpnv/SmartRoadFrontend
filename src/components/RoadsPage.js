@@ -5,89 +5,47 @@ import * as RoadsService from "../services/RoadsService"
 import {Button, Form, Table} from "react-bootstrap";
 import Copyright from "./ui/Copyright";
 import {Redirect} from "react-router-dom";
-import LocalizedStrings from 'react-localization';
+import {withTranslation} from "react-i18next";
 
-let strings = new LocalizedStrings({
-    en: {
-        header: "Traffic jam statistics",
-        graphYDesc: "Amount of cars on road",
-        graphXDesc: "Time",
-        roadsHeader: "Roads",
-        tableAddress: "Address",
-        tableDesc: "Description",
-        tableSpeed: "Max allowed speed",
-        tableLines: "Amount of lines",
-        tableLength: "Length (km)",
-        tableBandwidth: "Bandwidth (per hour)",
-        tableState: "State"
-    },
-    ua: {
-        header: "Статистика заторів",
-        graphYDesc: "Кількість авто",
-        graphXDesc: "Час",
-        roadsHeader: "Дороги",
-        tableAddress: "Адресса",
-        tableDesc: "Опис",
-        tableSpeed: "Максимальна швидкість",
-        tableLines: "Кількість полос",
-        tableLength: "Довжина (км)",
-        tableBandwidth: "Пропускна здатність (за годину)",
-        tableState: "Стан"
-    }
-});
-
-export default class RoadsPage extends React.Component {
+class RoadsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             roads: [],
             roadState: ""
         };
-
-        this.switchLanguage = this.switchLanguage.bind(this);
     }
 
     componentDidMount() {
         RoadsService.getAll().then(res => this.setState({...this.state, roads: res}))
     }
 
-    switchLanguage() {
-        let currentLanguage = localStorage.getItem("language");
-        if (currentLanguage === 'en') {
-            strings.setLanguage('ua');
-        } else {
-            strings.setLanguage('en');
-        }
-        localStorage.setItem("language", strings.getLanguage());
-        this.setState({...this.state});
-    }
-
     render() {
-        strings.setLanguage(localStorage.getItem("language"));
+        const {t} = this.props;
         return (
             <div className="contentContainer" style={{width: "1000px", height: "1200px"}}>
                 {localStorage.getItem("login") === 'true' ? '' : <Redirect to={"/smart_road/login"}/>}
                 <Header switchLanguage={this.switchLanguage}/>
-                <h1 style={{textAlign: "center"}}>{strings.header}</h1>
+                <h1 style={{textAlign: "center"}}>{t("roadsH")}</h1>
                 <div style={{width: "90%", height: "400px"}}>
-                    <label style={{textAlign: "center", fontSize: "14px"}}>{strings.graphYDesc}</label>
+                    <label style={{textAlign: "center", fontSize: "14px"}}>{t("graphYDesc")}</label>
                     <Chart/>
-                    <label style={{textAlign: "center", fontSize: "14px", float: "right"}}>{strings.graphXDesc}</label>
+                    <label style={{textAlign: "center", fontSize: "14px", float: "right"}}>{t("graphXDesc")}</label>
                 </div>
                 <div style={{width: "100%", height: "50px"}}></div>
                 <div style={{width: "100%", height: "580px", margin: "auto"}}>
-                    <h1 style={{textAlign: "center"}}>{strings.roadsHeader}</h1>
+                    <h1 style={{textAlign: "center"}}>{t("roadsHeader")}</h1>
                     <Table striped bordered hover size="sm" style={{marginTop: "15px"}}>
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>{strings.tableAddress}</th>
-                            <th>{strings.tableDesc}</th>
-                            <th>{strings.tableSpeed}</th>
-                            <th>{strings.tableLines}</th>
-                            <th>{strings.tableLength}</th>
-                            <th>{strings.tableBandwidth}</th>
-                            <th>{strings.tableState}</th>
+                            <th>{t("tableAddress")}</th>
+                            <th>{t("tableDesc")}</th>
+                            <th>{t("tableSpeed")}</th>
+                            <th>{t("tableLines")}</th>
+                            <th>{t("tableLength")}</th>
+                            <th>{t("tableBandwidth")}</th>
+                            <th>{t("tableState")}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -106,21 +64,17 @@ export default class RoadsPage extends React.Component {
                                             RoadsService.getType(road.id)
                                                 .then(res => {
                                                     this.setState({...this.state, roadState: res});
-                                                    if (localStorage.getItem("language") === 'en') {
-                                                        alert(this.state.roadState);
+                                                    if (this.state.roadState === 'jam') {
+                                                        alert(t("jamState"))
                                                     } else {
-                                                        if (this.state.roadState === 'jam') {
-                                                            alert("затор")
-                                                        } else {
-                                                            alert("вільно")
-                                                        }
+                                                        alert(t("empty"))
                                                     }
                                                 })
                                                 .catch(
                                                     error => {
                                                         alert(`Error occurred: ${error}`)
                                                     })}>
-                                            {strings.tableState}
+                                            {t("tableState")}
                                         </Button>
                                     </td>
                                 </tr>
@@ -129,8 +83,10 @@ export default class RoadsPage extends React.Component {
                         </tbody>
                     </Table>
                 </div>
-                <Copyright />
+                <Copyright/>
             </div>
         )
     }
 }
+
+export default withTranslation()(RoadsPage)

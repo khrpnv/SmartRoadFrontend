@@ -6,45 +6,10 @@ import * as ServiceStationsService from '../services/ServiceStationsService'
 import * as ServiceTypesService from '../services/ServiceTypesService'
 import Copyright from "./ui/Copyright";
 import {Redirect} from "react-router-dom";
-import LocalizedStrings from 'react-localization';
 import Map from "./ui/GoogleMaps"
+import {withTranslation} from "react-i18next";
 
-let strings = new LocalizedStrings({
-    en: {
-        facilityHeader: "Add your facility",
-        serviceName: "Service name:",
-        serviceNamePlaceholder: "Enter name",
-        serviceDesc: "Service description:",
-        serviceDescPlaceholder: "Enter description",
-        serviceLat: "Service latitude:",
-        serviceLon: "Service longitude:",
-        serviceType: "Service type:",
-        serviceTypeDrop: "Service Type",
-        submit: "Submit",
-        searchHeader: "Search for facility",
-        tableName: "Name",
-        tableDesc: "Description",
-        tableLoc: "Location"
-    },
-    ua: {
-        facilityHeader: "Додати установу",
-        serviceName: "Ім'я установи:",
-        serviceNamePlaceholder: "Введіть ім'я",
-        serviceDesc: "Опис установи:",
-        serviceDescPlaceholder: "Введіть опис",
-        serviceLat: "Координата широти:",
-        serviceLon: "Координата довготи:",
-        serviceType: "Тип сервісу:",
-        serviceTypeDrop: "Тип Сервісу",
-        submit: "Підтвердити",
-        searchHeader: "Пошук установи",
-        tableName: "Ім'я",
-        tableDesc: "Опис",
-        tableLoc: "Місцезнаходження"
-    }
-});
-
-export default class OwnerPage extends React.Component {
+class OwnerPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,18 +29,6 @@ export default class OwnerPage extends React.Component {
         this.handleLatChange = this.handleLatChange.bind(this);
         this.handleLongChange = this.handleLongChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.switchLanguage = this.switchLanguage.bind(this);
-    }
-
-    switchLanguage() {
-        let currentLanguage = localStorage.getItem("language");
-        if (currentLanguage === 'en') {
-            strings.setLanguage('ua');
-        } else {
-            strings.setLanguage('en');
-        }
-        localStorage.setItem("language", strings.getLanguage());
-        this.setState({...this.state});
     }
 
     setTypeId = (typeId) => {
@@ -144,7 +97,7 @@ export default class OwnerPage extends React.Component {
     }
 
     render() {
-        strings.setLanguage(localStorage.getItem("language"));
+        const {t} = this.props;
         return (
             <div className="contentContainer" style={{
                 width: "950px",
@@ -154,34 +107,34 @@ export default class OwnerPage extends React.Component {
                 <Header switchLanguage={this.switchLanguage}/>
                 <div className="ownerData">
                     <div className="ownerSegmentHeader">
-                        <h2>{strings.facilityHeader}</h2>
+                        <h2>{t("facilityHeader")}</h2>
                     </div>
                     <div className="ownerForm">
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>{strings.serviceName} </Form.Label>
-                            <Form.Control type="text" placeholder={strings.serviceNamePlaceholder}
+                            <Form.Label>{t("serviceName")} </Form.Label>
+                            <Form.Control type="text" placeholder={t("serviceNamePlaceholder")}
                                           value={this.state.name}
                                           onChange={this.handleNameChange}/>
 
-                            <Form.Label style={{marginTop: "5px"}}>{strings.serviceDesc} </Form.Label>
+                            <Form.Label style={{marginTop: "5px"}}>{t("serviceDesc")} </Form.Label>
                             <Form.Control as="textarea" rows="3" value={this.state.desc}
                                           onChange={this.handleDescChange}
-                                          placeholder={strings.serviceDescPlaceholder}/>
+                                          placeholder={t("serviceDescPlaceholder")}/>
 
-                            <Form.Label style={{marginTop: "5px"}}>{strings.serviceLat} </Form.Label>
+                            <Form.Label style={{marginTop: "5px"}}>{t("serviceLat")} </Form.Label>
                             <Form.Control type="number" step="0.1" placeholder="Enter latitude" value={this.state.lat}
                                           onChange={this.handleLatChange}/>
 
-                            <Form.Label style={{marginTop: "5px"}}>{strings.serviceLon} </Form.Label>
+                            <Form.Label style={{marginTop: "5px"}}>{t("serviceLon")} </Form.Label>
                             <Form.Control type="number" step="0.1" placeholder="Enter longitude" value={this.state.long}
                                           onChange={this.handleLongChange}/>
 
-                            <Form.Label style={{marginTop: "5px"}}>{strings.serviceType} </Form.Label>
-                            <ServiceTypesDropDown setTypeId={this.setTypeId} title={strings.serviceTypeDrop}/>
+                            <Form.Label style={{marginTop: "5px"}}>{t("serviceTypeHeader")} </Form.Label>
+                            <ServiceTypesDropDown setTypeId={this.setTypeId} title={t("serviceTypeDrop")}/>
 
                             <div style={{marginTop: "10px", textAlign: "center"}}>
                                 <Button variant="primary" type="submit" onClick={this.handleSubmit}>
-                                    {strings.submit}
+                                    {t("submit")}
                                 </Button>
                             </div>
                         </Form.Group>
@@ -190,11 +143,11 @@ export default class OwnerPage extends React.Component {
 
                 <div className="searchStation">
                     <div className="ownerSegmentHeader">
-                        <h2>{strings.searchHeader}</h2>
+                        <h2>{t("searchHeader")}</h2>
                     </div>
                     <div style={{width: "100px", height: "130px", marginLeft: "5px"}}>
-                        <Form.Label style={{marginTop: "5px"}}>{strings.serviceType} </Form.Label>
-                        <ServiceTypesDropDown setTypeId={this.setSearchTypeId} title={strings.serviceTypeDrop}/>
+                        <Form.Label style={{marginTop: "5px"}}>{t("serviceTypeHeader")} </Form.Label>
+                        <ServiceTypesDropDown setTypeId={this.setSearchTypeId}/>
                         <Button variant="primary" style={{marginTop: "10px"}} onClick={() =>
                             ServiceTypesService.getServices(this.state.searchTypeId)
                                 .then(res => this.setState({...this.state, serviceStations: res}))
@@ -202,7 +155,7 @@ export default class OwnerPage extends React.Component {
                                     error => {
                                         alert(`Error occurred: ${error}`)
                                     })}>
-                            {strings.submit}
+                            {t("submit")}
                         </Button>
                     </div>
                     <div style={{marginTop: "20px"}}>
@@ -217,3 +170,5 @@ export default class OwnerPage extends React.Component {
         )
     }
 }
+
+export default withTranslation()(OwnerPage)

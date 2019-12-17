@@ -4,34 +4,13 @@ import * as ServiceStationsService from "../services/ServiceStationsService"
 import {Button, Form, Table} from "react-bootstrap";
 import ServiceTypesDropDown from "./ui/ServiceTypesDropDown";
 import {Redirect} from "react-router-dom";
-import LocalizedStrings from 'react-localization';
 import Map from "./ui/GoogleMaps"
 import axios from "axios";
+import {withTranslation} from "react-i18next";
 
 const BASE_URL = `https://smart-road.herokuapp.com/api/service_stations`;
 
-let strings = new LocalizedStrings({
-    en: {
-        getLoc: "Getting your current location...",
-        geoError: "Geolocation is not supported by this browser.",
-        submit: "Submit",
-        serviceType: "Service type",
-        tableName: "Name",
-        tableDesc: "Description",
-        tableCoords: "Location"
-    },
-    ua: {
-        getLoc: "Отримання Ваших поточних координат...",
-        geoError: "Геолокація недоступна в цьому браузері.",
-        submit: "Підтвердити",
-        serviceType: "Тип сервісу",
-        tableName: "Ім'я",
-        tableDesc: "Опис",
-        tableCoords: "Місцезнаходження"
-    }
-});
-
-export default class DriverPage extends React.Component {
+class DriverPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,25 +18,12 @@ export default class DriverPage extends React.Component {
             serviceStations: [],
             long: 36.232845,
             isLoading: true,
-            searchTypeId: -1,
-            title: strings.serviceType
+            searchTypeId: -1
         };
 
         this.coords = this.coords.bind(this);
         this.onItemClick = this.onItemClick.bind(this);
         this.setSearchTypeId = this.setSearchTypeId.bind(this);
-        this.switchLanguage = this.switchLanguage.bind(this);
-    }
-
-    switchLanguage() {
-        let currentLanguage = localStorage.getItem("language");
-        if (currentLanguage === 'en') {
-            strings.setLanguage('ua');
-        } else {
-            strings.setLanguage('en');
-        }
-        localStorage.setItem("language", strings.getLanguage());
-        this.setState({...this.state, title: strings.serviceType});
     }
 
     setSearchTypeId = (typeId) => {
@@ -69,6 +35,7 @@ export default class DriverPage extends React.Component {
     };
 
     coords = () => {
+        const {t} = this.props;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 this.setState({
@@ -79,7 +46,7 @@ export default class DriverPage extends React.Component {
                 });
             });
         } else {
-            alert(strings.geoError);
+            alert(t("geoError"));
         }
     };
 
@@ -94,7 +61,7 @@ export default class DriverPage extends React.Component {
     }
 
     render() {
-        strings.setLanguage(localStorage.getItem("language"));
+        const {t} = this.props;
         return (
             <div className="contentContainer" style={{
                 width: "900px",
@@ -107,10 +74,10 @@ export default class DriverPage extends React.Component {
                     height: "50px",
                     textAlign: "center"
                 } : {display: 'none'}}>
-                    <h2>{strings.getLoc}</h2>
+                    <h2>{t("getLoc")}</h2>
                 </div>
                 <div>
-                    <Form.Label style={{marginTop: "5px"}}>{strings.serviceType}: </Form.Label>
+                    <Form.Label style={{marginTop: "5px"}}>{t("serviceTypeHeader")}: </Form.Label>
                     <ServiceTypesDropDown setTypeId={this.setSearchTypeId}/>
                     <Button variant="primary" type="submit" style={{marginTop: "15px"}} onClick={() => {
                         let lat = this.state.lat;
@@ -125,7 +92,6 @@ export default class DriverPage extends React.Component {
                                             result.push(item)
                                         }
                                         if (index === res.length - 1) {
-                                            console.log(result)
                                             this.onItemClick(result);
                                         }
                                     })
@@ -135,7 +101,7 @@ export default class DriverPage extends React.Component {
                                 alert(`Error occurred: ${error}`)
                             })
                     }}>
-                        {strings.submit}
+                        {t("submit")}
                     </Button>
                 </div>
                 <div style={{marginTop: "20px"}}>
@@ -145,3 +111,5 @@ export default class DriverPage extends React.Component {
         )
     }
 }
+
+export default withTranslation()(DriverPage)

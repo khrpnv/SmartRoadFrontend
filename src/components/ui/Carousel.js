@@ -1,25 +1,12 @@
 import React from "react";
 import {Carousel} from "react-bootstrap";
-import LocalizedStrings from 'react-localization';
+import {withTranslation} from "react-i18next";
 
-let strings = new LocalizedStrings({
-    en: {
-        jam: "Traffic jam",
-        serviceStation: "Service station",
-        carWash: "Car wash"
-    },
-    ua: {
-        jam: "Затор",
-        serviceStation: "Станція обслуговування",
-        carWash: "Автомийка"
-    }
-});
-
-export default class ImageCarousel extends React.Component {
+class ImageCarousel extends React.Component {
 
     render() {
-        strings.setLanguage(localStorage.getItem("language"));
-        return(
+        const {t} = this.props;
+        return (
             <Carousel>
                 <Carousel.Item>
                     <img
@@ -28,7 +15,7 @@ export default class ImageCarousel extends React.Component {
                         alt="Traffic jam"
                     />
                     <Carousel.Caption>
-                        <h1>{strings.jam}</h1>
+                        <h1>{t("jam")}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
@@ -39,7 +26,7 @@ export default class ImageCarousel extends React.Component {
                     />
 
                     <Carousel.Caption>
-                        <h1>{strings.serviceStation}</h1>
+                        <h1>{t("serviceStation")}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
@@ -49,10 +36,12 @@ export default class ImageCarousel extends React.Component {
                         alt="Third slide"
                     />
                     <Carousel.Caption>
-                        <h1>{strings.carWash}</h1>
+                        <h1>{t("carWash")}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
         )
     }
 }
+
+export default withTranslation()(ImageCarousel)

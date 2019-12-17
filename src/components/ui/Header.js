@@ -1,23 +1,9 @@
 import React from "react";
 import {Navbar, Nav, Button, Image} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
-import LocalizedStrings from 'react-localization';
 import logoutImage from '../../images/logout.png'
-
-let strings = new LocalizedStrings({
-    en: {
-        home: "Home",
-        owner: "Owner",
-        driver: "Driver",
-        switchLanguage: "Switch Language"
-    },
-    ua: {
-        home: "Головна",
-        owner: "Власникам",
-        driver: "Водіям",
-        switchLanguage: "Змінити Мову"
-    }
-});
+import switchLanguage from "../../services/i18nService";
+import {withTranslation} from "react-i18next";
 
 class Header extends React.Component {
     constructor(props) {
@@ -26,7 +12,7 @@ class Header extends React.Component {
 
 
     render() {
-        strings.setLanguage(localStorage.getItem("language"));
+        const {t} = this.props;
         return (
             <>
                 <Navbar bg="dark" variant="dark" style={{cursor: "pointer"}}>
@@ -38,24 +24,24 @@ class Header extends React.Component {
                             ? {textDecoration: "underline"} : {textDecoration: 'none'}}
                                   onClick={() => {
                                       this.props.history.push("/smart_road/main")
-                                  }}>{strings.home}</Nav.Link>
+                                  }}>{t("home")}</Nav.Link>
                         <Nav.Link style={this.props.location.pathname === '/smart_road/owner'
                             ? {textDecoration: "underline"} : {textDecoration: 'none'}}
                                   onClick={() => {
                                       this.props.history.push("/smart_road/owner")
-                                  }}>{strings.owner}</Nav.Link>
+                                  }}>{t("owner")}</Nav.Link>
                         <Nav.Link style={this.props.location.pathname === '/smart_road/driver'
                             ? {textDecoration: "underline"} : {textDecoration: 'none'}}
                                   onClick={() => {
                                       this.props.history.push("/smart_road/driver")
-                                  }}>{strings.driver}</Nav.Link>
+                                  }}>{t("driver")}</Nav.Link>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
                         <Button
                             style={{marginRight: "20px"}}
                             variant="outline-success"
-                            onClick={this.props.switchLanguage}>
-                            {strings.switchLanguage}
+                            onClick={() => switchLanguage()}>
+                            {t("switchLanguage")}
                         </Button>
                         <img src={logoutImage}
                              style={{
@@ -64,8 +50,6 @@ class Header extends React.Component {
                              }}
                              onClick={() => {
                                  localStorage.setItem('login', 'false');
-                                 let prevValue = localStorage.getItem("language");
-                                 localStorage.setItem("language", prevValue);
                                  this.props.history.push('/smart_road/login')
                              }}
                         />
@@ -77,4 +61,4 @@ class Header extends React.Component {
     }
 }
 
-export default withRouter(Header)
+export default withRouter(withTranslation()(Header))

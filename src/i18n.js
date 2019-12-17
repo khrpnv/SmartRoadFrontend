@@ -55,7 +55,9 @@ const resources = {
             "tableBandwidth": "Bandwidth (per hour)",
             "tableState": "State",
             "jamState": "Jam",
-            "empty": "Available"
+            "empty": "Available",
+            "service": "Service",
+            "mapsLink": "Show in Google Maps"
         }
     },
     ua: {
@@ -111,7 +113,9 @@ const resources = {
             "tableBandwidth": "Пропускна здатність (за годину)",
             "tableState": "Стан",
             "jamState": "Затор",
-            "empty": "Вільно"
+            "empty": "Вільно",
+            "service": "Сервіс",
+            "mapsLink": "Показати на карті"
         }
     }
 };
